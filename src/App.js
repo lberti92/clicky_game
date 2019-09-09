@@ -10,37 +10,21 @@ class App extends Component {
   state = {
     crystals,
     target: 12,
-    topscore: 0,
+    newscore: 0,
     score: 0,
-    quess: false,
-    value: 1
+    guess: "false"
   }
-
-  // componentDidMount=()=>{
-  //   // this.handleClick()
-  // }
-  // update = () => {
-  // let newTarget = 12
-  // let newValue = this.state.values.map(x => (x = 
-  // Math.floor(Math.random() * (12))+1))
-  // this.setState({ target: newTarget })
-  // }
-
-  // class App extends Component {
-  //   state = {
-  //     friends,
-  //     target: 12,
-  //     score: 0,
-
-  //   }
 
 
   shuffleFriend = id => {
     const crystals = this.state.crystals.sort(function (a, b) {
-      return 0.5 - Math.random();
+      // return 0.5 - Math.random();
+      return Math.random()-0.5;
     })
     this.setState({ crystals })
   }
+
+
 
   // shuffle friend need to be called in handleClick
   // create the the attribute guessCorrectly = true or false
@@ -68,24 +52,45 @@ class App extends Component {
   //   }
   // }
 
-  handleClick = (id, value) => {
-    console.log(`in handleClick ${id} ${value}`);
 
-    let newScore = this.state.score + value
-
-    let newTopScore = this.state.score
-    if (this.state.guess === false && newTopScore === this.state.target) {
-      this.setState({ score: 0, topscore: newTopScore })
-      alert("congratulation you picked all 12 correctly")
-    } else if
-      (this.state.guess === false) {
-      this.setState({ guess: true, score: newScore })
-      this.shuffleFriend()
-    } else {
-     this.setState({ score: 0, topscore: newScore })
-      alert("guess incorrectly")
-    }
+  handleClick = (id, guess) => {
     
+    let newScore = this.state.score + 1
+
+    console.log(`in handleClick ${id} ${guess} ${newScore}`);
+
+    this.setState({guess: "true"})
+    // console.log(`after ${id} ${guess} ${newScore}`);
+    if (this.state.guess === "false" && newScore === this.state.target) {
+      this.setState({ score: 0, newscore: newScore})
+      alert("congratulation you won")
+    }
+
+    if (this.state.guess === "true" && newScore < this.state.target) {
+      // if (this.state.guess === "true" && newScore < this.state.newscore) {
+      this.setState({ score: 0, newscore: newScore, guess: "false"})
+      this.shuffleFriend();
+      alert("You lost")
+    } 
+    // else {
+    //   this.setState({ score: 0, guess: "false"})
+    //   alert("you lost")
+    // }
+
+    // }
+    //   let newTopScore = this.state.score
+    //   if (this.state.guess === false && newTopScore === this.state.target) {
+    //     this.setState({ score: 0, topscore: newTopScore })
+    //     alert("congratulation you picked all 12 correctly")
+    //   } else if
+    //     (this.state.guess === false) {
+    //     this.setState({ guess: true, score: newScore })
+    //     this.shuffleFriend()
+    //   } else {
+    //    this.setState({ score: 0, topscore: newScore })
+    //     alert("guess incorrectly")
+    //   }
+
   }
 
   //if guess is equal to false
@@ -96,7 +101,7 @@ class App extends Component {
   //else if 
   //if guess is equal to false
   //increase score by 1
-  //change quess to true
+  //change guess to true
   //reshuffle the deck
 
   //else guess is equal to true
@@ -108,7 +113,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <Scores target={this.state.target} yscore={this.state.score} />
+        <Scores newscore={this.state.newscore} yscore={this.state.score} />
         <Wrapper>
           {this.state.crystals.map(crystal => (
             <CrystalPics
@@ -117,9 +122,9 @@ class App extends Component {
               name={crystal.name}
               id={crystal.id}
               key={crystal.id}
-              value={this.state.value[crystal.id]}
+              // value={this.state.value[crystal.id]}
               score={this.handleClick}
-              quess={this.state.quess}
+              guess={this.state.guess}
             />
           ))}
         </Wrapper>
