@@ -12,14 +12,14 @@ class App extends Component {
     target: 12,
     newscore: 0,
     score: 0,
-    guess: "false"
+    // guess: false
   }
 
 
   shuffleFriend = id => {
     const crystals = this.state.crystals.sort(function (a, b) {
       // return 0.5 - Math.random();
-      return Math.random()-0.5;
+      return Math.random() - 0.5;
     })
     this.setState({ crystals })
   }
@@ -53,61 +53,48 @@ class App extends Component {
   // }
 
 
-  handleClick = (id, guess) => {
-    
+  handleClick = (id) => {
     let newScore = this.state.score + 1
+    this.setState({ score: newScore })
+    let guess = false;
 
     console.log(`in handleClick ${id} ${guess} ${newScore}`);
 
-    this.setState({guess: "true"})
-    // console.log(`after ${id} ${guess} ${newScore}`);
-    if (this.state.guess === "false" && newScore === this.state.target) {
-      this.setState({ score: 0, newscore: newScore})
-      alert("congratulation you won")
-    }
 
-    if (this.state.guess === "true" && newScore < this.state.target) {
+
+
+    // if (guess === false && newScore === this.state.target) {
+    //   this.setState({ score: 0, newscore: newScore })
+    //   alert("congratulation you won")
+    // }
+
+    if (guess === false && newScore < this.state.target) {
+      const newArray = this.state.crystals.map(crystal => {
+        if (crystal.id === id && !crystal.clicked) {
+          crystal.clicked = true
+          console.log ("Clicked " + crystal.clicked)
+          guess = true;
+        }
+        return crystal
+      })
+      this.setState({ crystals: newArray })
+      this.shuffleFriend()
+
+      console.log("guess " + guess)
+    }
+    // else if (guess === true && newScore < this.state.target) {
+      else if (guess === true && newScore < this.state.target) {
+
       // if (this.state.guess === "true" && newScore < this.state.newscore) {
-      this.setState({ score: 0, newscore: newScore, guess: "false"})
+      this.setState({ score: 0, newscore: newScore })
       this.shuffleFriend();
       alert("You lost")
-    } 
-    // else {
-    //   this.setState({ score: 0, guess: "false"})
-    //   alert("you lost")
-    // }
-
-    // }
-    //   let newTopScore = this.state.score
-    //   if (this.state.guess === false && newTopScore === this.state.target) {
-    //     this.setState({ score: 0, topscore: newTopScore })
-    //     alert("congratulation you picked all 12 correctly")
-    //   } else if
-    //     (this.state.guess === false) {
-    //     this.setState({ guess: true, score: newScore })
-    //     this.shuffleFriend()
-    //   } else {
-    //    this.setState({ score: 0, topscore: newScore })
-    //     alert("guess incorrectly")
-    //   }
-
+    }
+    else {
+      this.setState({ score: 0 })
+      alert("you lost")
+    }
   }
-
-  //if guess is equal to false
-  //if score = 12 display you completed successfully
-  //update topscore
-  //reset score to 0
-
-  //else if 
-  //if guess is equal to false
-  //increase score by 1
-  //change guess to true
-  //reshuffle the deck
-
-  //else guess is equal to true
-  //if topscore < score update topscore
-  //reset score to 0
-  // }
 
   render() {
     return (
@@ -124,7 +111,7 @@ class App extends Component {
               key={crystal.id}
               // value={this.state.value[crystal.id]}
               score={this.handleClick}
-              guess={this.state.guess}
+            // guess={this.state.guess}
             />
           ))}
         </Wrapper>
