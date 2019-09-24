@@ -6,9 +6,7 @@ function CrystalPics(props) {
             <img className = "card-img-top" 
             src={props.image} 
             alt={props.className} 
-            // value={props.value}
-            guess={props.guess}
-            onClick={() => props.score(props.id, props.guess)}
+              onClick={() => props.score(props.id)}
             />
         </div>
     )
