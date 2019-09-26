@@ -1,6 +1,6 @@
 import React from "react";
 
-function CrystalPics(props) {
+function MinionPics(props) {
     return (
         <div className="card">
             <img className = "card-img-top" 
@@ -13,4 +13,4 @@ function CrystalPics(props) {
 }
 
 
-export default CrystalPics;
+export default MinionPics;

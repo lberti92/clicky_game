@@ -1,68 +1,65 @@
 import React, { Component } from "react";
-import CrystalPics from "./components/CrystalPictures";
+import MinionPics from "./components/MinionPictures";
 import Scores from "./components/Scores";
 import Header from "./components/Header"
-import crystals from "./crystals.json";
-
+import minions from "./minions.json";
 import Wrapper from "./components/Wrapper"
 import './App.css';
 
 class App extends Component {
   state = {
-    crystals,
-    target: 12,
+    minions,
     newscore: 0,
     score: 0,
     message: ""
   }
 
-  shuffleCrystals = array => {
-    const crystals = array.sort(function (a, b) {
+  shuffleMinions = array => {
+    const minions = array.sort(function (a, b) {
       return Math.random() - 0.5;
     })
-    this.setState({ crystals })
+    this.setState({ minions })
   }
 
   handleClick = (id) => {
     let newScore = this.state.score + 1;
-
     this.setState({ score: newScore })
-    const crystals = this.state.crystals;
-    const crystalClicked = crystals.filter(crystal => crystal.id === id);
+
+    const minions = this.state.minions;
+    const minionClicked = minions.filter(minion => minion.id === id);
 
     console.log(`in handleClick ${id}  ${newScore}`);
-    if (crystalClicked[0].clicked) {
-      this.setState({ message: "You guessed incorrectly, Please try again." });
 
-      for (let i = 0; i < crystals.length; i++) {
-        crystals[i].clicked = false;
+    if (minionClicked[0].clicked) {
+      this.setState({ message: "You guessed incorrectly. Please try again." });
+
+      for (let i = 0; i < minions.length; i++) {
+        minions[i].clicked = false;
       }
+      console.log("NEWSCORE", newScore);
+      console.log("newscore", this.state.newscore)
+      console.log(this.state.score)
+      let updateScore =(this.state.score > this.state.newscore) ? this.state.score : this.state.newscore;
       this.setState({
-        crystals,
-        newscore: (this.state.newScore >= this.state.newscore) ? this.state.newScore : this.state.score,
+        minions,
+        newscore: updateScore,
         score: 0
       })
-
-
     } else {
-
-      crystalClicked[0].clicked = true;
+      minionClicked[0].clicked = true;
       if (newScore <= 11){
         this.setState({ message: "You guessed correctly" });
-
-      }
-      else {
+      } else {
         if (newScore === 12)
-        this.setState({ message: "You won" });
+        this.setState({ message: "Congratulations!!  You Won!!" });
         this.setState({
-          crystals,
+          minions,
           newscore: newScore,
           score: 0
         })
       }
     }
-    this.shuffleCrystals(crystals)
-
+    this.shuffleMinions(minions)
   }
 
   render() {
@@ -74,13 +71,13 @@ class App extends Component {
           newscore={this.state.newscore}
           yscore={this.state.score} />
         <Wrapper>
-          {this.state.crystals.map(crystal => (
-            <CrystalPics
+          {this.state.minions.map(minion => (
+            <MinionPics
               className="image"
-              image={crystal.picture}
-              name={crystal.name}
-              id={crystal.id}
-              key={crystal.id}
+              image={minion.picture}
+              name={minion.name}
+              id={minion.id}
+              key={minion.id}
               score={this.handleClick}
             />
           ))}
